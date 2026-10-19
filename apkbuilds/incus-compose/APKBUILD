@@ -1,0 +1,40 @@
+# Maintainer: Michał Lipski <michal@tallica.pl>
+#
+# Third-party package of lxc/incus-compose; the upstream authors are not the
+# maintainers of this APKBUILD.
+# Packages the official upstream release binary. Upstream only publishes
+# linux/amd64 and linux/arm64 builds, hence the restricted arch list.
+pkgname=incus-compose
+pkgver=1.3.5
+pkgrel=0
+pkgdesc="Run Compose files on Incus containers and VMs"
+url="https://github.com/lxc/incus-compose"
+arch="x86_64 aarch64"
+license="Apache-2.0"
+depends="ca-certificates"
+source="incus-compose_${pkgver}_linux_amd64.tar.gz::$url/releases/download/v$pkgver/incus-compose_${pkgver}_linux_amd64.tar.gz
+	incus-compose_${pkgver}_linux_arm64.tar.gz::$url/releases/download/v$pkgver/incus-compose_${pkgver}_linux_arm64.tar.gz"
+options="!check !strip" # prebuilt binary; keep it exactly as upstream released it
+builddir="$srcdir"
+
+package() {
+	case "$CARCH" in
+	x86_64) _asset="incus-compose_${pkgver}_linux_amd64.tar.gz" ;;
+	aarch64) _asset="incus-compose_${pkgver}_linux_arm64.tar.gz" ;;
+	*) die "unsupported architecture: $CARCH" ;;
+	esac
+
+	# abuild unpacks both release archives; extract the one for $CARCH
+	# into its own directory so the binaries cannot overwrite each other.
+	mkdir -p "$srcdir/$CARCH"
+	tar -xzf "$srcdir/$_asset" -C "$srcdir/$CARCH"
+
+	install -Dm755 "$srcdir/$CARCH/$pkgname" "$pkgdir"/usr/bin/"$pkgname"
+	install -Dm644 "$srcdir/$CARCH/LICENSE" \
+		"$pkgdir"/usr/share/licenses/"$pkgname"/LICENSE
+}
+
+sha512sums="
+f51dc337f06fe828de530794589fad8758aa1bbe70a03ebeaf19f1822bcc306d1efdb88e20ba46b2ce1dbf5863108ffd5ce60af06b518661e8cb52662b7df96d  incus-compose_1.3.5_linux_amd64.tar.gz
+82b30b2cc588f3681308ebd6fc5d4618b1a4ab217f29864580cc034a9972040aa79a865e7ef3db8367f98209cfed648d9bd6b4c805f510a5fe52a7c08c13feac  incus-compose_1.3.5_linux_arm64.tar.gz
+"

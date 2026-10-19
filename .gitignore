@@ -1,0 +1,28 @@
+# Generated repository output: .apk files, signed APKINDEX archives, and the
+# copy of the public key served under /keys. Nothing here belongs in git.
+site/
+
+# Scratch directories from local builds and experiments.
+work/
+
+# abuild work directories, in case abuild is run outside the container.
+apkbuilds/*/src/
+apkbuilds/*/pkg/
+
+# Built packages and repository indexes. The build scripts only ever write
+# these under site/, but ignore them everywhere as a safety net.
+*.apk
+APKINDEX.tar.gz
+Packages.adb
+
+# Private signing keys must never enter the repository. Public keys
+# (*.rsa.pub) are intentionally not ignored: keys/tallica.rsa.pub is
+# committed and served to clients.
+*.rsa
+
+# macOS metadata.
+.DS_Store
+
+# Editor and tooling state.
+.idea/
+.vscode/

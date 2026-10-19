@@ -1,0 +1,79 @@
+name: apk-repo
+
+on:
+  push:
+    branches: [master]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - runner: ubuntu-latest
+            arch: x86_64
+          - runner: ubuntu-24.04-arm
+            arch: aarch64
+    runs-on: ${{ matrix.runner }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Restore signing key
+        env:
+          APK_SIGNING_KEY_B64: ${{ secrets.APK_SIGNING_KEY_B64 }}
+        run: |
+          set -eu
+          test -n "$APK_SIGNING_KEY_B64"
+          mkdir -p "$RUNNER_TEMP/abuild"
+          printf '%s' "$APK_SIGNING_KEY_B64" \
+            | base64 -d > "$RUNNER_TEMP/abuild/tallica.rsa"
+          chmod 600 "$RUNNER_TEMP/abuild/tallica.rsa"
+          openssl rsa -in "$RUNNER_TEMP/abuild/tallica.rsa" \
+            -pubout -out "$RUNNER_TEMP/abuild/tallica.rsa.pub"
+          cmp "$RUNNER_TEMP/abuild/tallica.rsa.pub" keys/tallica.rsa.pub
+
+      - name: Build ${{ matrix.arch }} repository
+        env:
+          ABUILD_PRIVKEY: ${{ runner.temp }}/abuild/tallica.rsa
+        run: ./scripts/build.sh ${{ matrix.arch }}
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: site-${{ matrix.arch }}
+          path: site
+          if-no-files-found: error
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: site-*
+          path: site
+          merge-multiple: true
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+      - id: deployment
+        uses: actions/deploy-pages@v4

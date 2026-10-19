@@ -1,0 +1,39 @@
+# Contributor: Michał Lipski <michal@tallica.pl>
+# Maintainer: Michał Lipski <michal@tallica.pl>
+#
+# Packages the official upstream release binary. Upstream only publishes
+# linux/amd64 and linux/arm64 builds, hence the restricted arch list.
+pkgname=lazyincus
+pkgver=0.16.1
+pkgrel=0
+pkgdesc="Terminal UI for Incus containers, VMs and images"
+url="https://github.com/tallica/lazyincus"
+arch="x86_64 aarch64"
+license="MIT"
+depends="ca-certificates"
+source="lazyincus_${pkgver}_linux_amd64.tar.gz::$url/releases/download/v$pkgver/lazyincus_${pkgver}_linux_amd64.tar.gz
+	lazyincus_${pkgver}_linux_arm64.tar.gz::$url/releases/download/v$pkgver/lazyincus_${pkgver}_linux_arm64.tar.gz"
+options="!check !strip" # prebuilt binary; keep it exactly as upstream released it
+builddir="$srcdir"
+
+package() {
+	case "$CARCH" in
+	x86_64) _asset="lazyincus_${pkgver}_linux_amd64.tar.gz" ;;
+	aarch64) _asset="lazyincus_${pkgver}_linux_arm64.tar.gz" ;;
+	*) die "unsupported architecture: $CARCH" ;;
+	esac
+
+	# abuild unpacks both release archives; extract the one for $CARCH
+	# into its own directory so the binaries cannot overwrite each other.
+	mkdir -p "$srcdir/$CARCH"
+	tar -xzf "$srcdir/$_asset" -C "$srcdir/$CARCH"
+
+	install -Dm755 "$srcdir/$CARCH/$pkgname" "$pkgdir"/usr/bin/"$pkgname"
+	install -Dm644 "$srcdir/$CARCH/LICENSE" \
+		"$pkgdir"/usr/share/licenses/"$pkgname"/LICENSE
+}
+
+sha512sums="
+3f2b2c709206ef2458b11c80963f77ab0aca22fc5ae0dc28d27f9f8cc6ec09026e89b255f10a14885d287c3cbaab4b506832b227e15bb652b798d5fe742d0680  lazyincus_0.16.1_linux_amd64.tar.gz
+793465914bdf797015e5c0c4e0a44c5beaa06b3b32c483d52c79c229521b26ca76360ccdc016c505214cd0c5a20973361e4daf7b8e5e815f233c343035f9680b  lazyincus_0.16.1_linux_arm64.tar.gz
+"
