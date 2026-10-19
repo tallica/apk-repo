@@ -14,6 +14,7 @@ is not versioned software.
   from GitHub Pages.
 - Binary APKBUILDs for `lazyincus` 0.16.1 and `incus-compose` 1.3.5, covering
   `x86_64` and `aarch64`.
+- Added the `sms2mqtt` package (0.7.9), with an OpenRC service.
 - Build, signing, and checksum scripts, plus a `Makefile`.
 - GitHub Actions workflow that builds both architectures, signs the repository
   indexes, and deploys the result to GitHub Pages.

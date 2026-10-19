@@ -1,10 +1,9 @@
 # tallica/apk-repo
 
-A signed Alpine package repository published from GitHub Pages. It publishes
-binary packages that repackage official upstream release binaries; it does not
-build from source. Alpine's official aports repository rejects prebuilt
-packages, so an aports submission is a separate, source-build task to be
-created only if needed.
+A signed Alpine package repository published from GitHub Pages. Packages
+repackage official upstream release binaries. Alpine's official aports
+repository rejects prebuilt packages, so an aports submission is a separate
+task to be created only if needed.
 
 See `README.md` for the current package list and install instructions.
 
@@ -76,10 +75,10 @@ Follow [Keep a Changelog 1.1.0](https://keepachangelog.com/en/1.1.0/):
 
 ## Adding a package
 
-Create `apkbuilds/<pkgname>/APKBUILD`; `scripts/build.sh` builds every
-directory under `apkbuilds/`. Set `arch=` to the architectures supported by the
-upstream release, and add a matrix entry to the workflow if it needs anything
-beyond `x86_64`/`aarch64`.
+Create `apkbuilds/<pkgname>/APKBUILD`. Packages normally repackage upstream
+release assets; source builds are possible if upstream has no binaries. Set
+`arch=` to the architectures supported by the package, and add a matrix entry
+to the workflow if it needs anything beyond `x86_64`/`aarch64`.
 
 ## Updating a package
 
@@ -104,6 +103,8 @@ builds both architectures, updates `CHANGELOG.md`, and commits.
   upstream release tag) so rebuilding an unchanged package version produces
   byte-identical APKs. Do not remove them; this prevents stale-index integrity
   errors for clients.
+- `sms2mqtt` ships an `-openrc` subpackage with `/etc/init.d` and
+  `/etc/conf.d`.
 - `jochumdev/incus-compose` is a fork; the canonical upstream is
   `lxc/incus-compose`. `incus-compose` is a third-party package: its APKBUILD
   lists only `# Maintainer`, not `# Contributor`, because the package

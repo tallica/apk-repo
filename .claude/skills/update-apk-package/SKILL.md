@@ -1,6 +1,6 @@
 ---
 name: update-apk-package
-description: Bump lazyincus or incus-compose to a new upstream release, refresh checksums, build both architectures, update the changelog, and commit. Use when asked to update an APK package version.
+description: Bump a package under apkbuilds/ to a new upstream release, refresh checksums, build both architectures, update the changelog, and commit. Use when asked to update an APK package version.
 ---
 
 # Update an APK package
@@ -19,17 +19,26 @@ package under `apkbuilds/` to a new upstream release.
 
 1. Identify `apkbuilds/<pkgname>/APKBUILD` and the target version. If the
    version is missing, ask for it.
-2. Read `url=` from the APKBUILD and verify the release and both Linux assets
-   exist:
+2. Read `url=` and `source=` from the APKBUILD.
+   - If `source` references `releases/download`, verify the release and both
+     Linux assets exist:
 
-   ```sh
-   gh release view "v<version>" -R <owner>/<repo> --json assets \
-     --jq '.assets[].name'
-   ```
+     ```sh
+     gh release view "v<version>" -R <owner>/<repo> --json assets \
+       --jq '.assets[].name'
+     ```
 
-   The APKBUILD expects `<pkgname>_<version>_linux_amd64.tar.gz` and
-   `<pkgname>_<version>_linux_arm64.tar.gz`. Stop if either is missing; do not
-   change the asset naming without updating the APKBUILD.
+     The APKBUILD expects `<pkgname>_<version>_linux_amd64.tar.gz` and
+     `<pkgname>_<version>_linux_arm64.tar.gz`. Stop if either is missing; do not
+     change the asset naming without updating the APKBUILD.
+   - If `source` references `archive/refs/tags`, verify the tag exists:
+
+     ```sh
+     git ls-remote --tags "https://github.com/<owner>/<repo>.git" \
+       "refs/tags/v<version>"
+     ```
+
+     Stop if the tag is missing.
 
 3. Set `pkgver=<version>` and `pkgrel=0` in the APKBUILD.
 4. Run `make checksum`. Confirm that `git diff` changes only `pkgver`, `pkgrel`,

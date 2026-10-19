@@ -1,0 +1,23 @@
+#!/sbin/openrc-run
+
+name="sms2mqtt"
+description="Bridge between a Huawei USB modem and MQTT"
+
+command="/usr/bin/sms2mqtt"
+command_background="true"
+pidfile="/run/${RC_SVCNAME}.pid"
+
+output_log="/var/log/sms2mqtt.log"
+error_log="/var/log/sms2mqtt.log"
+
+depend() {
+	need net
+}
+
+start_pre() {
+	if [ -f /etc/conf.d/sms2mqtt ]; then
+		set -a
+		. /etc/conf.d/sms2mqtt
+		set +a
+	fi
+}

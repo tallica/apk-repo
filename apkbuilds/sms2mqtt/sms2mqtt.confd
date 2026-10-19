@@ -1,0 +1,20 @@
+# sms2mqtt environment. Uncomment and edit before starting the service.
+
+#MODEM_DEVICE="/dev/ttyUSB0"
+#MODEM_BAUD_RATE="115200"
+#MODEM_POLL_SECONDS="10"
+
+#MQTT_BROKER="tcp://localhost:1883"
+#MQTT_CLIENT_ID="sms2mqtt"
+#MQTT_USERNAME=""
+#MQTT_PASSWORD=""
+
+#FORWARD_TO=""
+
+#MQTT_TOPIC_INBOX="sms2mqtt/inbox"
+#MQTT_TOPIC_SEND="sms2mqtt/send"
+#MQTT_TOPIC_STATUS="sms2mqtt/status"
+#MQTT_TOPIC_MODEM="sms2mqtt/modem"
+
+# Run as an unprivileged user that can read the modem device, if desired.
+#command_user="sms2mqtt:dialout"

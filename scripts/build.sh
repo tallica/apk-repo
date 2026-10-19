@@ -20,7 +20,12 @@ case "$ARCH" in
 			for d in /work/apkbuilds/*/; do
 				pkg=$(basename "$d")
 				mkdir -p "/build/apkbuilds/$pkg"
-				cp "$d/APKBUILD" "/build/apkbuilds/$pkg/"
+				for f in "$d"*; do
+					case "$f" in
+					*/src|*/pkg) continue ;;
+					esac
+					cp "$f" "/build/apkbuilds/$pkg/"
+				done
 			done
 			for d in /build/apkbuilds/*/; do
 				(cd "$d" && abuild -F checksum)
@@ -114,7 +119,8 @@ docker run --rm --platform "$PLATFORM" \
 		-exec cp -v {} "/site/edge/$arch/" \;
 
 	cd "/site/edge/$arch"
-	apk index --no-warnings --quiet -o APKINDEX.tar.gz \
+	apk index --no-warnings --quiet --rewrite-arch "$arch" \
+		-o APKINDEX.tar.gz \
 		--description "tallica edge $arch" ./*.apk
 	abuild-sign -k /home/builder/.abuild/tallica.rsa APKINDEX.tar.gz
 '

@@ -1,0 +1,47 @@
+# Maintainer: Michał Lipski <michal@tallica.pl>
+#
+# Repackages the official release binaries. Upstream publishes linux/amd64 and
+# linux/arm64 builds; the armv7 asset is not currently published by this repo.
+pkgname=sms2mqtt
+pkgver=0.7.9
+pkgrel=0
+pkgdesc="Bridge between a Huawei USB modem and Home Assistant via MQTT"
+url="https://github.com/tallica/sms2mqtt"
+arch="x86_64 aarch64"
+license="MIT"
+depends="ca-certificates"
+subpackages="$pkgname-openrc"
+source="sms2mqtt_${pkgver}_linux_amd64.tar.gz::$url/releases/download/v$pkgver/sms2mqtt_${pkgver}_linux_amd64.tar.gz
+	sms2mqtt_${pkgver}_linux_arm64.tar.gz::$url/releases/download/v$pkgver/sms2mqtt_${pkgver}_linux_arm64.tar.gz
+	sms2mqtt.initd
+	sms2mqtt.confd"
+options="!check !strip" # prebuilt binary; upstream runs the tests before release
+builddir="$srcdir"
+
+package() {
+	case "$CARCH" in
+	x86_64) _asset="sms2mqtt_${pkgver}_linux_amd64.tar.gz" ;;
+	aarch64) _asset="sms2mqtt_${pkgver}_linux_arm64.tar.gz" ;;
+	*) die "unsupported architecture: $CARCH" ;;
+	esac
+
+	# abuild unpacks both release archives; extract the one for $CARCH
+	# into its own directory so the binaries cannot overwrite each other.
+	mkdir -p "$srcdir/$CARCH"
+	tar -xzf "$srcdir/$_asset" -C "$srcdir/$CARCH"
+
+	install -Dm755 "$srcdir/$CARCH/$pkgname" "$pkgdir"/usr/bin/"$pkgname"
+	install -Dm644 "$srcdir/$CARCH/LICENSE" \
+		"$pkgdir"/usr/share/licenses/"$pkgname"/LICENSE
+	install -Dm755 "$srcdir/sms2mqtt.initd" \
+		"$pkgdir"/etc/init.d/sms2mqtt
+	install -Dm644 "$srcdir/sms2mqtt.confd" \
+		"$pkgdir"/etc/conf.d/sms2mqtt
+}
+
+sha512sums="
+adf46d013323aa3784a97224d3cc798bd1632e9be334b0b49de4355e2672abd0477f3c56359d4f4f22efc59850ed386dc72aaae90000d085b0371d8c30db38bc  sms2mqtt_0.7.9_linux_amd64.tar.gz
+26520f5247b4048de890122e85abe6f8b9e43e20a9d99fa7e4eed576b40fc73320055a50d58d3e7025416ab557e831e1075f92500a95811a488674ea4c287469  sms2mqtt_0.7.9_linux_arm64.tar.gz
+48a347cccb3de6e77a77b36bb3ac73c59f031a0b1667040b3538b969c6e632e67bbbacb35d3615b609e78c4f999a4c686c633e6b15053af3546b705b32c2c584  sms2mqtt.initd
+f0baa43b305180573d18ca54958d9b11b162ca948e86b7b3ecc79394a6556ede07adced30955f00ad74f7674ea82ab42d3bcae3b89efb7dba13464d573c847b8  sms2mqtt.confd
+"

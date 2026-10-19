@@ -8,9 +8,10 @@ Current packages:
 | --- | --- |
 | `lazyincus` | Terminal UI for Incus containers, VMs and images |
 | `incus-compose` | Run Compose files on Incus containers and VMs |
+| `sms2mqtt` | Bridge between a Huawei USB modem and Home Assistant via MQTT |
 
-The packages repackage the official upstream release binaries, the same
-approach as the Homebrew tap.
+The packages repackage official upstream release binaries, the same approach as
+the Homebrew tap.
 
 ## Install
 
@@ -32,7 +33,7 @@ Then choose one repository form. Keep only one `tallica` line in
 ```sh
 echo "https://tallica.github.io/apk-repo/edge" >> /etc/apk/repositories
 apk update
-apk add lazyincus incus-compose
+apk add lazyincus incus-compose sms2mqtt
 ```
 
 ### Tagged (`@tallica`)
@@ -43,7 +44,7 @@ A tagged repository is masked from plain installs, so request it explicitly:
 ```sh
 echo "@tallica https://tallica.github.io/apk-repo/edge" >> /etc/apk/repositories
 apk update
-apk add lazyincus@tallica incus-compose@tallica
+apk add lazyincus@tallica incus-compose@tallica sms2mqtt@tallica
 ```
 
 The tag is recorded in `/etc/apk/world`, so `apk upgrade` keeps using it.
@@ -60,6 +61,15 @@ tree serves both; `apk` selects the architecture automatically.
 
 If `apk` reports `v2 package integrity error`, the local index is older than
 the published packages. Run `apk update` and retry.
+
+### sms2mqtt service
+
+`sms2mqtt` includes an OpenRC service. Edit `/etc/conf.d/sms2mqtt`, then:
+
+```sh
+rc-update add sms2mqtt default
+rc-service sms2mqtt start
+```
 
 ## Layout
 
@@ -121,7 +131,7 @@ docker run --rm -it -v "$PWD/site:/repo:ro" alpine:edge sh
 # inside:
 cp /repo/keys/tallica.rsa.pub /etc/apk/keys/
 echo /repo/edge >> /etc/apk/repositories
-apk update && apk add lazyincus incus-compose
+apk update && apk add lazyincus incus-compose sms2mqtt
 ```
 
 ## Updating a package
