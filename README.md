@@ -58,6 +58,9 @@ incus-compose version
 The current packages provide `x86_64` and `aarch64` binaries. The same `edge`
 tree serves both; `apk` selects the architecture automatically.
 
+If `apk` reports `v2 package integrity error`, the local index is older than
+the published packages. Run `apk update` and retry.
+
 ## Layout
 
 ```text

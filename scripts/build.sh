@@ -41,6 +41,9 @@ esac
 
 KEY="${ABUILD_PRIVKEY:-$HOME/.abuild/tallica.rsa}"
 PACKAGER="${PACKAGER:-Michał Lipski <michal@tallica.pl>}"
+# Fixed timestamp so rebuilding an unchanged package version produces
+# byte-identical APKs instead of overwriting them with different bytes.
+SOURCE_DATE_EPOCH="${SOURCE_DATE_EPOCH:-1767225600}"
 
 [ -f "$KEY" ] || {
 	echo "signing key not found: $KEY" >&2
@@ -66,6 +69,7 @@ docker run --rm --platform "$PLATFORM" \
 	-v "$KEY.pub:/keys/tallica.rsa.pub:ro" \
 	-v "$PWD/site:/site" \
 	-e PACKAGER="$PACKAGER" \
+	-e SOURCE_DATE_EPOCH="$SOURCE_DATE_EPOCH" \
 	alpine:edge sh -euc '
 	apk add --no-cache alpine-sdk
 
@@ -92,6 +96,7 @@ docker run --rm --platform "$PLATFORM" \
 
 	su builder -c "
 		set -e
+		export SOURCE_DATE_EPOCH=$SOURCE_DATE_EPOCH
 		for d in /build/apkbuilds/*/; do
 			cd \"\$d\"
 			abuild -r

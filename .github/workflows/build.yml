@@ -3,6 +3,12 @@ name: apk-repo
 on:
   push:
     branches: [master]
+    paths:
+      - 'apkbuilds/**'
+      - 'scripts/**'
+      - 'keys/**'
+      - 'Makefile'
+      - '.github/workflows/build.yml'
   workflow_dispatch:
 
 permissions:
