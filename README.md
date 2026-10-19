@@ -107,4 +107,4 @@ bumps the APKBUILD, refreshes checksums, builds both architectures, updates
 ## Documentation
 
 Maintenance conventions, packaging details, and key handling are in
-[CLAUDE.md](CLAUDE.md). Release history is in [CHANGELOG.md](CHANGELOG.md).
+[CLAUDE.md](CLAUDE.md). Change history is in [CHANGELOG.md](CHANGELOG.md).

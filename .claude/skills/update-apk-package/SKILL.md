@@ -43,8 +43,8 @@ package under `apkbuilds/` to a new upstream release.
 
    Stop and report if either build fails; do not commit a broken package.
 
-6. Add an entry under `## [Unreleased]` in `CHANGELOG.md`, using
-   `### Changed` (create the section if needed):
+6. Add an entry under a `## [YYYY-MM-DD]` heading for today in `CHANGELOG.md`,
+   using `### Changed` (create or reuse today's heading and section):
 
    ```markdown
    - Updated `<pkgname>` to `<version>`.

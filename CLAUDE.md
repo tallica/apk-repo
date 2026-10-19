@@ -63,11 +63,12 @@ capitalized.
 
 Follow [Keep a Changelog 1.1.0](https://keepachangelog.com/en/1.1.0/):
 
-- Add user-visible changes under `## [Unreleased]`.
+- Add user-visible changes under a `## [YYYY-MM-DD]` heading for today; create
+  the heading if it does not exist.
 - Use the categories `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, and
   `Security`.
-- On release, move the entries to a new `## [x.y.z] - YYYY-MM-DD` section and
-  update the comparison links at the bottom.
+- Entries are grouped by date; there are no release versions or comparison
+  links.
 - A typical mapping from commits: `feat` → `Added`, `fix` → `Fixed`,
   breaking changes → `Changed` or `Removed`, security fixes → `Security`.
   `docs`, `chore`, `ci`, and `test` usually do not need an entry unless the
