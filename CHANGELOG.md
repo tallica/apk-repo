@@ -17,3 +17,7 @@ is not versioned software.
 - Build, signing, and checksum scripts, plus a `Makefile`.
 - GitHub Actions workflow that builds both architectures, signs the repository
   indexes, and deploys the result to GitHub Pages.
+
+### Fixed
+
+- Updated GitHub Actions to Node.js 24-compatible versions.
