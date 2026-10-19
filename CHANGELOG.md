@@ -18,6 +18,10 @@ is not versioned software.
 - GitHub Actions workflow that builds both architectures, signs the repository
   indexes, and deploys the result to GitHub Pages.
 
+### Changed
+
+- Clarified the install guide for tagged and untagged repositories.
+
 ### Fixed
 
 - Updated GitHub Actions to Node.js 24-compatible versions.

@@ -14,26 +14,49 @@ approach as the Homebrew tap.
 
 ## Install
 
+Run as root, or prefix each command with `doas`/`sudo`.
+
+Install the signing key once:
+
 ```sh
 apk add ca-certificates
 wget -O /etc/apk/keys/tallica.rsa.pub \
   https://tallica.github.io/apk-repo/keys/tallica.rsa.pub
+```
+
+Then choose one repository form. Keep only one `tallica` line in
+`/etc/apk/repositories` (check with `grep tallica /etc/apk/repositories`).
+
+### Untagged (recommended)
+
+```sh
 echo "https://tallica.github.io/apk-repo/edge" >> /etc/apk/repositories
 apk update
 apk add lazyincus incus-compose
 ```
 
-Architecture availability follows each upstream release; the current packages
-provide `x86_64` and `aarch64` binaries. If the packages later enter Alpine's
-official repositories, tag this one so official packages win by default:
+### Tagged (`@tallica`)
 
-```text
-@tallica https://tallica.github.io/apk-repo/edge
-```
+Use this if the packages may also come from Alpine's official repositories.
+A tagged repository is masked from plain installs, so request it explicitly:
 
 ```sh
+echo "@tallica https://tallica.github.io/apk-repo/edge" >> /etc/apk/repositories
+apk update
 apk add lazyincus@tallica incus-compose@tallica
 ```
+
+The tag is recorded in `/etc/apk/world`, so `apk upgrade` keeps using it.
+
+Verify:
+
+```sh
+lazyincus --version
+incus-compose version
+```
+
+The current packages provide `x86_64` and `aarch64` binaries. The same `edge`
+tree serves both; `apk` selects the architecture automatically.
 
 ## Layout
 
