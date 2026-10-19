@@ -99,6 +99,8 @@ docker run --rm --platform "$PLATFORM" \
 		export SOURCE_DATE_EPOCH=$SOURCE_DATE_EPOCH
 		for d in /build/apkbuilds/*/; do
 			cd \"\$d\"
+			pkgver=\$(sed -n 's/^pkgver=//p' APKBUILD)
+			export ABUILD_LAST_COMMIT=\"v\$pkgver\"
 			abuild -r
 		done
 	"

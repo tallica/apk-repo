@@ -100,9 +100,10 @@ builds both architectures, updates `CHANGELOG.md`, and commits.
   at the top level rather than a `$pkgname-$pkgver/` directory.
 - `options="!check !strip"` is intentional: the binaries are pre-tested and
   already stripped upstream, and the package should contain them unchanged.
-- `scripts/build.sh` pins `SOURCE_DATE_EPOCH` so rebuilding an unchanged
-  package version produces byte-identical APKs. Do not remove it; this prevents
-  stale-index integrity errors for clients.
+- `scripts/build.sh` pins `SOURCE_DATE_EPOCH` and `ABUILD_LAST_COMMIT` (to the
+  upstream release tag) so rebuilding an unchanged package version produces
+  byte-identical APKs. Do not remove them; this prevents stale-index integrity
+  errors for clients.
 - `jochumdev/incus-compose` is a fork; the canonical upstream is
   `lxc/incus-compose`. `incus-compose` is a third-party package: its APKBUILD
   lists only `# Maintainer`, not `# Contributor`, because the package

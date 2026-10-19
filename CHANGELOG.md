@@ -25,5 +25,6 @@ is not versioned software.
 ### Fixed
 
 - Updated GitHub Actions to Node.js 24-compatible versions.
-- Pinned package build timestamps and limited CI to package-related paths so
-  rebuilding an unchanged version produces identical packages.
+- Pinned package build timestamps and commit metadata, and limited CI to
+  package-related paths, so rebuilding an unchanged version produces identical
+  packages.
