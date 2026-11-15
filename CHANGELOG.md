@@ -6,6 +6,13 @@ The format is based on [Keep a Changelog 1.1.0](https://keepachangelog.com/en/1.
 Entries are grouped by date rather than release version, since this repository
 is not versioned software.
 
+## [2026-11-15]
+
+### Changed
+
+- Updated `lazyincus` to `0.17.1`.
+- Updated `incus-compose` to `1.4.1`.
+
 ## [2026-10-19]
 
 ### Added

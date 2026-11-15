@@ -4,7 +4,7 @@
 # Packages the official upstream release binary. Upstream only publishes
 # linux/amd64 and linux/arm64 builds, hence the restricted arch list.
 pkgname=lazyincus
-pkgver=0.16.1
+pkgver=0.17.1
 pkgrel=0
 pkgdesc="Terminal UI for Incus containers, VMs and images"
 url="https://github.com/tallica/lazyincus"
@@ -34,6 +34,6 @@ package() {
 }
 
 sha512sums="
-3f2b2c709206ef2458b11c80963f77ab0aca22fc5ae0dc28d27f9f8cc6ec09026e89b255f10a14885d287c3cbaab4b506832b227e15bb652b798d5fe742d0680  lazyincus_0.16.1_linux_amd64.tar.gz
-793465914bdf797015e5c0c4e0a44c5beaa06b3b32c483d52c79c229521b26ca76360ccdc016c505214cd0c5a20973361e4daf7b8e5e815f233c343035f9680b  lazyincus_0.16.1_linux_arm64.tar.gz
+2da0527a6a95958dedaf142710f566eee9328a94bf8f0314b0762958e0cc05ced5ae7fc0419fa2eba9dd82850dfa575f309940f84b3bf7ec8925461645c5146f  lazyincus_0.17.1_linux_amd64.tar.gz
+da9d7ee4d56c599bf5ada53fc19e3a41df315089a510026582a1d3a447b1a942c134d5af4c535807c52d08f0621c9b344c39c981dc9670e5ba9711bba8c9698c  lazyincus_0.17.1_linux_arm64.tar.gz
 "
